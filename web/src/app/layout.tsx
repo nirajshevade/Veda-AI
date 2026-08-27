@@ -43,19 +43,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full min-h-[100dvh]">
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="VedaAI" />
       </head>
-      <body className="h-full bg-[#EBEBEB] text-gray-900 flex overflow-hidden antialiased select-none">
+      <body className="h-full min-h-[100dvh] bg-[#EBEBEB] text-gray-900 flex flex-col md:flex-row overflow-hidden antialiased select-none">
         {/* Floating Left Sidebar Card (Desktop) */}
         <Sidebar />
 
         {/* Floating Right Main Workspace Card (Mobile Responsive) */}
-        <div className="flex-1 flex flex-col h-full md:h-[calc(100vh-24px)] md:my-3 md:mr-3 md:ml-0 bg-white rounded-none md:rounded-[28px] shadow-sm overflow-hidden border-0 md:border md:border-gray-100">
+        <div className="flex-1 flex flex-col h-full min-h-0 md:h-[calc(100vh-24px)] md:my-3 md:mr-3 md:ml-0 bg-white rounded-none md:rounded-[28px] shadow-sm overflow-hidden border-0 md:border md:border-gray-100">
           {children}
         </div>
 

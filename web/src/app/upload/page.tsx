@@ -117,17 +117,17 @@ export default function UploadPage() {
       {/* Top Header */}
       <Header showBack={false} />
 
-      {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto px-4 md:px-8 py-8 flex flex-col items-center justify-center">
-        <div className="w-full max-w-4xl flex flex-col items-center my-auto">
+      {/* Main Content Area - Mobile Optimized Scrolling without Top Clipping */}
+      <div className="flex-1 overflow-y-auto px-4 md:px-8 pt-4 pb-36 md:py-8 flex flex-col items-center justify-start md:justify-center">
+        <div className="w-full max-w-4xl flex flex-col items-center md:my-auto">
           {/* Header Title with Light Orange Pill Badge */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-gray-900 tracking-tight flex items-center justify-center flex-wrap gap-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-center text-gray-900 tracking-tight flex items-center justify-center flex-wrap gap-2">
             <span>Upload</span>
-            <span className="bg-[#FFEBE5] text-[#FF5A36] px-4 py-1 rounded-full font-bold">
+            <span className="bg-[#FFEBE5] text-[#FF5A36] px-3.5 py-1 rounded-full font-bold inline-block">
               Question Paper & Answer Sheets
             </span>
           </h1>
-          <p className="text-gray-500 mt-2 text-xs sm:text-sm md:text-base font-normal text-center">
+          <p className="text-gray-500 mt-2 text-xs sm:text-sm md:text-base font-normal text-center max-w-xl">
             Upload your question paper and student handwritten answer sheet to begin live OCR extraction & mapping
           </p>
 
