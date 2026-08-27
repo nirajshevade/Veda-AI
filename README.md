@@ -206,7 +206,7 @@ The project includes an **ultra-slim, multi-stage Docker build** based on `node:
 # 2. Build and launch container in background
 docker compose up --build -d
 ```
-Access the application immediately at **[http://localhost:3000](http://localhost:3000)**.
+Access the application immediately at **[http://localhost:3001](http://localhost:3001)** (or port 3000 if local `npm run dev` is stopped).
 
 To stop the container:
 ```bash
@@ -218,8 +218,8 @@ docker compose down
 # 1. Build the production image
 docker build -t veda-ai-app ./web
 
-# 2. Run the container
-docker run -d -p 3000:3000 --name veda-ai-container --env-file web/.env.local veda-ai-app
+# 2. Run the container (maps to port 3001)
+docker run -d -p 3001:3000 --name veda-ai-container --env-file web/.env.local veda-ai-app
 ```
 
 ---
