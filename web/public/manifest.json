@@ -1,0 +1,27 @@
+{
+  "id": "/upload",
+  "name": "VedaAI — AI Assessment Extraction & Mapping",
+  "short_name": "VedaAI",
+  "description": "Automated examination question extraction, student handwriting transcription, answer mapping and grading.",
+  "start_url": "/upload",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FF5A36",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
