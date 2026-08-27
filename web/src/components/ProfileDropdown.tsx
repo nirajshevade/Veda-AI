@@ -2,15 +2,25 @@
 
 import React, { useRef, useEffect } from "react";
 import Image from "next/image";
-import { User, Award, Shield, LogOut, ChevronRight, Settings } from "lucide-react";
+import { Award, Shield, LogOut, ChevronRight, Settings } from "lucide-react";
 
 interface ProfileDropdownProps {
   isOpen: boolean;
   onClose: () => void;
   onOpenSettings: () => void;
+  onOpenCertification: () => void;
+  onOpenPrivacy: () => void;
+  onSignOut: () => void;
 }
 
-export function ProfileDropdown({ isOpen, onClose, onOpenSettings }: ProfileDropdownProps) {
+export function ProfileDropdown({ 
+  isOpen, 
+  onClose, 
+  onOpenSettings,
+  onOpenCertification,
+  onOpenPrivacy,
+  onSignOut
+}: ProfileDropdownProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,7 +43,11 @@ export function ProfileDropdown({ isOpen, onClose, onOpenSettings }: ProfileDrop
       className="absolute right-0 top-12 w-72 bg-white rounded-3xl shadow-2xl border border-gray-100 p-3.5 z-50 animate-in fade-in zoom-in-95 duration-150"
     >
       {/* Profile Header */}
-      <div className="flex items-center gap-3 p-2.5 bg-[#F8F8FA] rounded-2xl border border-gray-100 mb-2">
+      <div 
+        onClick={() => { onClose(); onOpenCertification(); }}
+        className="flex items-center gap-3 p-2.5 bg-[#F8F8FA] hover:bg-gray-100/80 rounded-2xl border border-gray-100 mb-2 cursor-pointer transition-colors"
+        title="View Teacher Profile"
+      >
         <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 border border-gray-200/90 shadow-2xs flex-shrink-0 relative">
           <Image 
             src="/Niraj-Photo.png" 
@@ -64,7 +78,7 @@ export function ProfileDropdown({ isOpen, onClose, onOpenSettings }: ProfileDrop
         </button>
 
         <button 
-          onClick={onClose}
+          onClick={() => { onClose(); onOpenCertification(); }}
           className="flex items-center justify-between px-3 py-2 hover:bg-gray-50 rounded-xl transition-colors text-left cursor-pointer"
         >
           <div className="flex items-center gap-2.5">
@@ -75,7 +89,7 @@ export function ProfileDropdown({ isOpen, onClose, onOpenSettings }: ProfileDrop
         </button>
 
         <button 
-          onClick={onClose}
+          onClick={() => { onClose(); onOpenPrivacy(); }}
           className="flex items-center justify-between px-3 py-2 hover:bg-gray-50 rounded-xl transition-colors text-left cursor-pointer"
         >
           <div className="flex items-center gap-2.5">
@@ -88,7 +102,7 @@ export function ProfileDropdown({ isOpen, onClose, onOpenSettings }: ProfileDrop
 
       <div className="pt-2 mt-1 border-t border-gray-100">
         <button 
-          onClick={onClose}
+          onClick={() => { onClose(); onSignOut(); }}
           className="flex items-center gap-2.5 w-full px-3 py-2 text-rose-600 hover:bg-rose-50 rounded-xl transition-colors text-xs font-semibold cursor-pointer"
         >
           <LogOut size={15} />

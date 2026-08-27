@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Menu, X, ChevronDown, ClipboardList, HelpCircle, Sparkles, Settings, ChevronsRight, Building2 } from "lucide-react";
+import { ArrowLeft, Menu, X, ChevronDown, ClipboardList, HelpCircle, Sparkles, Settings, ChevronsRight, Building2, Shield, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ProfileDropdown } from "./ProfileDropdown";
 import { SettingsModal } from "./SettingsModal";
@@ -144,6 +144,58 @@ export function Header({ showBack = true, backHref = "/upload" }: HeaderProps) {
     }
   };
 
+  const openCertification = () => {
+    setFeatureModalData({
+      title: "Teacher Certification & Profile",
+      tag: "Faculty Profile",
+      icon: (
+        <div className="w-8 h-8 rounded-full overflow-hidden border border-gray-200 shadow-2xs">
+          <Image src="/Niraj-Photo.png" alt="Niraj Shevade" width={32} height={32} className="object-cover object-top w-full h-full scale-110" />
+        </div>
+      ),
+      overview: "Faculty and Lead Architect of VedaAI Assessment Intelligence platform.",
+      purpose: "Official academic and institutional profile for Niraj Shevade at AISSMS IOIT, Pune.",
+      capabilities: [
+        "Faculty In-charge: Niraj Shevade.",
+        "Institution: AISSMS IOIT, Pune (All India Shri Shivaji Memorial Society's Institute of Information Technology).",
+        "Department: Department of Information Technology / AI & Data Science.",
+        "Affiliation: Savitribai Phule Pune University (SPPU).",
+        "Academic Year: 2025-2026."
+      ]
+    });
+  };
+
+  const openPrivacyPolicy = () => {
+    setFeatureModalData({
+      title: "Privacy & Evaluation Security Policy",
+      tag: "Policies",
+      icon: <Shield size={22} className="text-[#FF5A36]" />,
+      overview: "Guidelines and data protection standards governing student answer sheet evaluation on VedaAI.",
+      purpose: "Ensures compliance with institutional student data privacy, zero-retention principles, and AI grading transparency.",
+      capabilities: [
+        "1. Zero Remote Data Retention: Assessment sheets are processed in client-side memory and temporary browser IndexedDB. No student work is permanently retained on remote databases.",
+        "2. Encrypted AI Vision Processing: All OCR and grading payloads are encrypted in-transit over HTTPS directly to Google Gemini API.",
+        "3. Pedagogical AI Transparency: AI-suggested marks are advisory aids. Human faculty evaluators retain ultimate authority over final score entry.",
+        "4. Academic Confidentiality: Evaluators must only upload authorized student examination scripts adhering to institutional FERPA and academic privacy standards."
+      ]
+    });
+  };
+
+  const openSignOutNotice = () => {
+    setFeatureModalData({
+      title: "Authentication & Session Notice",
+      tag: "Session Info",
+      icon: <LogOut size={22} className="text-rose-500" />,
+      overview: "No Authentication Required.",
+      purpose: "VedaAI is designed for friction-free faculty evaluation with zero-login, client-side session processing per PRD specifications.",
+      capabilities: [
+        "No user login or authentication service is enabled on this instance.",
+        "Active evaluation state is maintained locally in your browser memory and IndexedDB.",
+        "To reset your active workspace, click the Back (<--) arrow in the header or clear your browser cache."
+      ]
+    });
+  };
+
   return (
     <>
       <header className="flex items-center justify-between w-full h-14 md:h-16 px-3.5 md:px-8 border-b border-gray-100 flex-shrink-0 bg-white relative">
@@ -241,6 +293,9 @@ export function Header({ showBack = true, backHref = "/upload" }: HeaderProps) {
               isOpen={showProfile} 
               onClose={() => setShowProfile(false)} 
               onOpenSettings={() => setShowSettings(true)}
+              onOpenCertification={openCertification}
+              onOpenPrivacy={openPrivacyPolicy}
+              onSignOut={openSignOutNotice}
             />
           </div>
 
