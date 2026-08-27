@@ -123,10 +123,10 @@ export function Sidebar() {
             <Link href="/upload" className="flex items-center gap-2" title="VedaAI">
               {isCollapsed ? (
                 <Image 
-                  src="/Frame 1618872393.png" 
+                  src="/icon.svg" 
                   alt="VedaAI Logo" 
-                  width={30} 
-                  height={30} 
+                  width={28} 
+                  height={28} 
                   className="rounded-lg object-contain" 
                   priority
                 />

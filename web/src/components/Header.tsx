@@ -210,13 +210,13 @@ export function Header({ showBack = true, backHref = "/upload" }: HeaderProps) {
             >
               <ArrowLeft size={18} />
               <div className="flex md:hidden items-center gap-1.5">
-                <Image src="/Frame 1618872393.png" alt="VedaAI" width={22} height={22} className="rounded object-contain" />
+                <Image src="/icon.svg" alt="VedaAI" width={22} height={22} className="rounded-lg object-contain" />
                 <span className="font-bold text-gray-900 text-sm">VedaAI</span>
               </div>
             </button>
           ) : (
             <div className="flex md:hidden items-center gap-1.5">
-              <Image src="/Frame 1618872393.png" alt="VedaAI" width={22} height={22} className="rounded object-contain" />
+              <Image src="/icon.svg" alt="VedaAI" width={22} height={22} className="rounded-lg object-contain" />
               <span className="font-bold text-gray-900 text-sm">VedaAI</span>
             </div>
           )}
