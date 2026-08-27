@@ -1,0 +1,14 @@
+services:
+  veda-ai:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: veda-ai-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    env_file:
+      - ./web/.env.local
+    restart: unless-stopped

@@ -63,7 +63,7 @@
 ### 7. 🎨 Institutional Profile & Figma Aesthetic Alignment
 - **Faculty In-Charge**: **Niraj Shevade** with custom avatar framing (`/Niraj-Photo.png`).
 - **Institution**: **AISSMS IOIT, Pune** (*All India Shri Shivaji Memorial Society's Institute of Information Technology, Pune*).
-- **Exact Figma Assets**: Utilizes original assets (`/Icon.png`, `/Vector.png`, `/file-text.png`, `/Frame 18.png`, `/Frame 39959.png`, `/AnalysingLoader.png`).
+- **Exact Figma Assets**: Utilizes original assets (`/Icon.png`, `/Vector.png`, `/file-text.png`, `/Frame 18.png`, `/Frame 39959.png`, `/AnalysingLoader.png`, `/sidebar-toggle.svg`).
 - **Feature Popups**: Interactive window modals for all tab buttons (*Home*, *Classroom*, *Assignments*, *Exams*, *Library*, *Toolkit*, and *Settings*).
 - **Authentic Notifications**: Bell icon with genuine *No New Notifications* empty state.
 
@@ -122,15 +122,17 @@
 │                  Synchronized Interactive Review Workspace (/review)              │
 │       • Interactive Question Cards    • High-Res Canvas with Green Bbox           │
 │       • Stepper for Multi-Page Work   • Assessment Score Breakdown & Stats        │
+│       • Draggable Split Pane Divider  • 3-Dots Grip Handle for Width Tuning       │
 └───────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Framework**: Next.js 16 (App Router with Turbopack)
+- **Framework**: Next.js 16 (App Router with Turbopack & Standalone Output)
 - **Frontend Core**: React 19, TypeScript, Vanilla CSS + Tailwind CSS v4 tokens
 - **Vision & OCR AI**: Google Gemini 3.5 Flash / 3.5 Flash Lite (`@google/generative-ai`)
 - **PDF Rendering**: `pdfjs-dist` (Client-side vector-to-canvas rendering)
 - **Storage Layer**: Browser `IndexedDB` (`VedaAI_DB`) + in-memory cache
 - **Offline / PWA**: Service Worker (`sw.js`), Web App Manifest (`manifest.json`)
+- **Containerization**: Docker Multi-Stage Build (`node:20-alpine`) + `docker-compose.yml`
 - **Test Suite**: Vitest (17/17 automated unit tests passing)
 
 ---
@@ -141,8 +143,14 @@
 VedaAI-Task/
 ├── PRD_AI_Assessment_Extraction_Answer_Mapping.md
 ├── Screenshots/                        # Reference Figma screenshots & UI flows
-├── README.md                           # Comprehensive documentation
+├── README.md                           # Comprehensive production documentation
+├── LICENSE                             # MIT License
+├── .gitignore                          # Global git exclusions & security rules
+├── docker-compose.yml                  # 1-command Docker orchestration
 └── web/
+    ├── Dockerfile                      # Multi-stage production container build
+    ├── .dockerignore                   # Docker build optimization rules
+    ├── next.config.ts                  # Next.js standalone container configuration
     ├── public/
     │   ├── manifest.json               # PWA configuration manifest
     │   ├── sw.js                       # Service Worker for offline & caching
@@ -152,6 +160,7 @@ VedaAI-Task/
     │   ├── AnalysingLoader.png         # Animated extraction loader graphic
     │   ├── Niraj-Photo.png             # Faculty profile picture (Niraj Shevade)
     │   ├── Frame 18.png / toolkit-icon.png # AI Teacher's Toolkit icon
+    │   ├── sidebar-toggle.svg          # Sidebar split-frame toggle icon
     │   └── Frame 39959.png             # Official AISSMS IOIT emblem
     ├── src/
     │   ├── app/
@@ -165,7 +174,7 @@ VedaAI-Task/
     │   │   └── globals.css             # Theme tokens & fadePulse animations
     │   ├── components/
     │   │   ├── Header.tsx              # Responsive header, notifications & drawer
-    │   │   ├── Sidebar.tsx             # Navigation with custom Figma icons
+    │   │   ├── Sidebar.tsx             # Collapsible navigation with custom icons
     │   │   ├── QuestionList.tsx        # Extracted question & sub-part cards
     │   │   ├── AnswerSheetViewer.tsx   # Multi-page canvas viewer with pan/zoom
     │   │   ├── HighlightOverlay.tsx    # Synchronized green bounding box highlight
@@ -187,7 +196,35 @@ VedaAI-Task/
 
 ---
 
-## ⚡ Quickstart & Setup Guide
+## 🐳 Docker & Containerized Production Deployment
+
+The project includes an **ultra-slim, multi-stage Docker build** based on `node:20-alpine` with Next.js standalone output (~150MB image footprint, non-root security runner user).
+
+### Option A: 1-Command Startup with Docker Compose (Recommended)
+```bash
+# 1. Ensure your web/.env.local contains your GEMINI_API_KEY
+# 2. Build and launch container in background
+docker compose up --build -d
+```
+Access the application immediately at **[http://localhost:3000](http://localhost:3000)**.
+
+To stop the container:
+```bash
+docker compose down
+```
+
+### Option B: Standalone Docker Commands
+```bash
+# 1. Build the production image
+docker build -t veda-ai-app ./web
+
+# 2. Run the container
+docker run -d -p 3000:3000 --name veda-ai-container --env-file web/.env.local veda-ai-app
+```
+
+---
+
+## ⚡ Local Development & Setup Guide
 
 ### 1. Clone the Repository & Navigate to `web`
 ```bash
@@ -222,7 +259,7 @@ npx vitest run
 ```bash
 npm run build
 ```
-*Generates optimized production bundle using Next.js Turbopack.*
+*Generates optimized production bundle using Next.js standalone output.*
 
 ---
 
