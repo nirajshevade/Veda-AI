@@ -34,39 +34,47 @@ export default function UploadPage() {
         throw new Error("Could not extract pages from the uploaded documents. Please ensure files are valid PDFs or images.");
       }
 
+      const extractInBatches = async (endpoint: string, images: string[], batchSize: number) => {
+        let allResults: any[] = [];
+        for (let i = 0; i < images.length; i += batchSize) {
+          const chunk = images.slice(i, i + batchSize);
+          const res = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ images: chunk }),
+          });
+          if (!res.ok) {
+            const errJson = await res.json().catch(() => ({}));
+            throw new Error(errJson.error || `Extraction failed with status ${res.status}`);
+          }
+          const data = await res.json();
+          const items = data.questions || data.answers || [];
+          
+          // Adjust page numbers based on batch offset
+          items.forEach((item: any) => {
+            if (item.page !== undefined) {
+              item.page += i;
+            }
+            if (item.regions && Array.isArray(item.regions)) {
+              item.regions.forEach((r: any) => {
+                if (r.page !== undefined) r.page += i;
+              });
+            }
+          });
+          allResults = allResults.concat(items);
+        }
+        return allResults;
+      };
+
       // 2. Extract questions from question paper
-      const qRes = await fetch("/api/extract-questions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ images: questionImages }),
-      });
-
-      if (!qRes.ok) {
-        const errJson = await qRes.json().catch(() => ({}));
-        throw new Error(errJson.error || `Question extraction failed with status ${qRes.status}`);
-      }
-
-      const qData = await qRes.json();
-      const questions: Question[] = qData.questions || [];
+      const questions: Question[] = await extractInBatches("/api/extract-questions", questionImages, 3);
 
       if (questions.length === 0) {
         throw new Error("No questions could be detected from the uploaded question paper. Please verify the file is legible.");
       }
 
       // 3. Extract answers and transcribe handwriting from student answer sheet
-      const aRes = await fetch("/api/extract-answers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ images: answerImages }),
-      });
-
-      if (!aRes.ok) {
-        const errJson = await aRes.json().catch(() => ({}));
-        throw new Error(errJson.error || `Answer extraction failed with status ${aRes.status}`);
-      }
-
-      const aData = await aRes.json();
-      const answers: AnswerBlock[] = aData.answers || [];
+      const answers: AnswerBlock[] = await extractInBatches("/api/extract-answers", answerImages, 3);
 
       // 4. Deterministic mapping algorithm on user's actual extracted content
       const initialMappings = matchQuestionsToAnswers(questions, answers);

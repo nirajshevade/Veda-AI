@@ -20,8 +20,30 @@ export function matchQuestionsToAnswers(questions: Question[], answerBlocks: Ans
     }
   }
 
-  // Step 1: Exact label matches (handles out-of-order answers and multi-part sub-questions)
+  // Merge answer blocks that have the exact same normalized label
+  const mergedAnswers = new Map<string, AnswerBlock>();
+  const finalAnswerBlocks: AnswerBlock[] = [];
+
   for (const ans of answerBlocks) {
+    const norm = normalizeLabel(ans.detectedLabel);
+    if (norm) {
+      if (mergedAnswers.has(norm)) {
+        // Merge with existing
+        const existing = mergedAnswers.get(norm)!;
+        existing.text += "\n" + ans.text;
+        existing.regions.push(...ans.regions);
+        if (ans.transcriptionConfidence === "low") existing.transcriptionConfidence = "low";
+      } else {
+        mergedAnswers.set(norm, ans);
+        finalAnswerBlocks.push(ans);
+      }
+    } else {
+      finalAnswerBlocks.push(ans);
+    }
+  }
+
+  // Step 1: Exact label matches (handles out-of-order answers and multi-part sub-questions)
+  for (const ans of finalAnswerBlocks) {
     if (ans.detectedLabel) {
       const normAnsLabel = normalizeLabel(ans.detectedLabel);
       if (normAnsLabel) {
@@ -44,7 +66,7 @@ export function matchQuestionsToAnswers(questions: Question[], answerBlocks: Ans
   // Step 2: Sequential fallback (ONLY for unlabeled answers)
   // Answers with explicit unmatched labels (e.g. Q99) must NOT be force-matched here.
   const remainingQuestions = questions.filter(q => !matchedQuestionIds.has(q.id));
-  const unlabeledRemainingAnswers = answerBlocks.filter(
+  const unlabeledRemainingAnswers = finalAnswerBlocks.filter(
     a => !matchedAnswerIds.has(a.id) && (!a.detectedLabel || a.detectedLabel.trim() === "")
   );
 
@@ -79,7 +101,7 @@ export function matchQuestionsToAnswers(questions: Question[], answerBlocks: Ans
   }
 
   // Step 4: Unmatched answers (explicit label mismatch or extra answers)
-  for (const a of answerBlocks) {
+  for (const a of finalAnswerBlocks) {
     if (!matchedAnswerIds.has(a.id)) {
       mappings.push({
         questionId: null,
